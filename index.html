@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thuan Kitchen — Góc Bếp Thông Minh &amp; Vòng Quay Món Ăn</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #26211d;
+  --ink-soft: #6b6259;
+  --paper: #f5f2ec;
+  --surface: #ffffff;
+  --surface-muted: #faf7f1;
+  --charcoal: #241f1a;
+  --charcoal-2: #332a22;
+  --border: #e6ded0;
+  --border-soft: #efe9dd;
+
+  --marigold: #e2993c;
+  --marigold-hover: #d38a35;
+  --marigold-text: #9c5f1f;
+  --herb: #4f7a4f;
+  --herb-hover: #3c5f3c;
+  --chili: #c1462f;
+  --chili-hover: #a83a26;
+
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-pill: 999px;
+
+  --shadow-sm: 0 2px 6px rgba(36,32,27,.08);
+  --shadow-md: 0 10px 26px rgba(36,32,27,.10);
+  --shadow-lg: 0 26px 54px rgba(36,32,27,.20);
+
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-body); }
+html { -webkit-tap-highlight-color: transparent; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  padding-bottom: 60px;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+button { font-family: inherit; }
+::selection { background: var(--marigold); color: var(--ink); }
+:focus-visible { outline: 2.5px solid var(--marigold-text); outline-offset: 2px; border-radius: 4px; }
+
+/* ===== HEADER ===== */
+header {
+  background: linear-gradient(150deg, var(--charcoal), var(--charcoal-2));
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+}
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.9rem 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: -0.2px;
+}
+.logo i { color: var(--marigold); font-size: 1.1rem; }
+.nav-tabs {
+  display: flex;
+  gap: 4px;
+  background: rgba(255,255,255,0.08);
+  padding: 5px;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.tab-btn {
+  border: none;
+  background: transparent;
+  padding: 9px 18px;
+  border-radius: var(--r-pill);
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  color: rgba(255,255,255,0.65);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tab-btn:hover { color: #fff; }
+.tab-btn.active {
+  background: var(--marigold);
+  color: var(--ink);
+  box-shadow: 0 4px 14px rgba(226,153,60,0.4);
+}
+
+/* ===== LAYOUT ===== */
+.container { max-width: 1200px; margin: 2rem auto; padding: 0 1.25rem; }
+.tab-content { display: none; animation: fadeIn 0.35s ease-out; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.chef-grid { display: grid; grid-template-columns: 360px 1fr; gap: 1.5rem; align-items: start; }
+@media (max-width: 900px) { .chef-grid { grid-template-columns: 1fr; } }
+
+/* ===== CARD ===== */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-md);
+  padding: 1.4rem;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1.5rem;
+}
+.card-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.08rem;
+  margin-bottom: 1.1rem;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.title-group { display: inline-flex; align-items: center; gap: 8px; }
+.icon-badge {
+  width: 30px; height: 30px; min-width: 30px;
+  border-radius: 9px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; color: #fff; background: var(--marigold);
+}
+.icon-badge.herb { background: var(--herb); }
+.icon-badge.chili { background: var(--chili); }
+
+/* ===== INPUTS ===== */
+.input-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.hint { font-size: 0.76rem; color: var(--ink-soft); margin: -4px 0 0.7rem; display: flex; align-items: center; gap: 5px; }
+.ingredient-input-group { display: flex; gap: 8px; margin-bottom: 0.5rem; }
+input[type="text"], textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  outline: none;
+  transition: 0.2s;
+  font-size: 0.9rem;
+  background: var(--surface-muted);
+  color: var(--ink);
+}
+input[type="text"]:focus, textarea:focus {
+  border-color: var(--marigold);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px rgba(226,153,60,0.18);
+}
+textarea { resize: vertical; line-height: 1.55; }
+input[type="file"] { font-size: 0.85rem; color: var(--ink-soft); }
+input[type="file"]::file-selector-button {
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--ink);
+  background: var(--marigold);
+  border: none;
+  padding: 8px 14px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  margin-right: 10px;
+  transition: 0.2s;
+}
+input[type="file"]::file-selector-button:hover { background: var(--marigold-hover); }
+
+/* ===== BUTTONS ===== */
+.btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: var(--r-sm);
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--marigold); color: var(--ink); }
+.btn-primary:hover { background: var(--marigold-hover); transform: translateY(-1px); box-shadow: 0 8px 20px rgba(226,153,60,0.35); }
+.btn-secondary { background: var(--herb); color: #fff; }
+.btn-secondary:hover { background: var(--herb-hover); transform: translateY(-1px); box-shadow: 0 8px 18px rgba(79,122,79,0.3); }
+.btn-danger { background: var(--chili); color: #fff; }
+.btn-danger:hover { background: var(--chili-hover); }
+.btn-icon { padding: 10px 13px; }
+
+/* ===== TAGS ===== */
+.tags-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; min-height: 30px; }
+.tag {
+  padding: 5px 10px;
+  border-radius: var(--r-pill);
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  animation: pop 0.2s ease;
+}
+@keyframes pop { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.tag-main { background: #fbe6c4; color: var(--marigold-text); }
+.tag-sub { background: #e2ecdf; color: var(--herb-hover); }
+.tag i { cursor: pointer; transition: 0.15s; }
+.tag i:hover { color: var(--chili); transform: scale(1.15); }
+
+/* ===== RECIPE CARDS ===== */
+.recipe-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.2rem; }
+.recipe-card {
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s, box-shadow 0.25s;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-soft);
+}
+.recipe-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.recipe-img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  background: linear-gradient(135deg, #f3e2c2, #dfeadb);
+  display: block;
+  border-bottom: 3px solid var(--marigold);
+}
+.recipe-body { padding: 1rem 1.1rem; flex: 1; display: flex; flex-direction: column; gap: 0.6rem; }
+.recipe-title { font-family: var(--font-display); font-size: 1.12rem; font-weight: 600; line-height: 1.3; }
+.recipe-ingredients {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.recipe-actions { margin-top: auto; display: flex; gap: 8px; }
+.recipe-actions .btn { padding: 7px 12px; font-size: 0.78rem; }
+
+/* ===== WHEEL ===== */
+.wheel-container { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 1.5rem; align-items: start; }
+@media (max-width: 900px) { .wheel-container { grid-template-columns: 1fr; } }
+.wheel-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1.4rem 2.2rem;
+  background: linear-gradient(165deg, var(--charcoal), var(--charcoal-2));
+  border: none;
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+}
+.wheel-stage { position: relative; width: 100%; max-width: 440px; display: flex; justify-content: center; }
+#wheelCanvas {
+  border-radius: 50%;
+  box-shadow: 0 16px 36px rgba(0,0,0,0.4);
+  background: #fff;
+  display: block;
+  max-width: 100%;
+}
+.pointer {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-top: 30px solid var(--marigold);
+  z-index: 10;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.45));
+  pointer-events: none;
+}
+.spin-btn {
+  margin-top: 1.8rem;
+  padding: 15px 44px;
+  font-size: 1.05rem;
+  border-radius: var(--r-pill);
+  box-shadow: 0 10px 26px rgba(226,153,60,0.45);
+  letter-spacing: 0.3px;
+}
+.spin-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  border: 1px solid transparent;
+  transition: 0.18s;
+  cursor: pointer;
+}
+.checklist-item:hover { background: var(--surface-muted); border-color: var(--border); }
+.checklist-item.checked { background: #fdf0dc; border-color: #f2d29b; }
+.checklist-item label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.92rem; font-weight: 500; width: 100%; }
+.checklist-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--marigold-text); cursor: pointer; flex-shrink: 0; }
+.wheel-checklist { max-height: 380px; overflow-y: auto; padding-right: 4px; }
+.wheel-checklist::-webkit-scrollbar { width: 6px; }
+.wheel-checklist::-webkit-scrollbar-thumb { background: var(--border); border-radius: 8px; }
+
+#recipeContainer p, #wheelItemsList p {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--ink-soft) !important;
+  padding: 2.4rem 1rem !important;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--r-md);
+  font-size: 0.9rem;
+}
+
+/* ===== MODAL ===== */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 17, 13, 0.6);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(3px);
+  padding: 1rem;
+  animation: fadeIn 0.2s ease;
+}
+.modal.active { display: flex; }
+.modal-content {
+  background: var(--surface);
+  padding: 2rem;
+  border-radius: var(--r-lg);
+  max-width: 550px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 30px 64px rgba(0,0,0,0.3);
+  position: relative;
+  animation: slideUp 0.32s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+  outline: none;
+}
+@keyframes slideUp { from { transform: translateY(20px) scale(0.98); opacity: 0; } to { transform: none; opacity: 1; } }
+.modal-content::-webkit-scrollbar { width: 8px; }
+.modal-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 8px; }
+.modal-content h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.3rem; margin-bottom: 1.1rem; }
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--ink-soft);
+  background: none;
+  border: none;
+  padding: 4px;
+  transition: 0.15s;
+}
+.close-btn:hover { color: var(--chili); transform: rotate(90deg); }
+
+.image-preview { width: 100%; height: 160px; border-radius: var(--r-sm); object-fit: cover; margin-top: 10px; display: none; border: 1px solid var(--border); }
+.form-group { margin-bottom: 1.1rem; }
+.form-group label { font-weight: 700; font-size: 0.85rem; display: block; margin-bottom: 6px; }
+
+/* ===== WINNER ===== */
+.winner-card { text-align: center; }
+.winner-card h2 { color: var(--marigold-text); font-weight: 700; font-size: 1.05rem; margin-bottom: 0.3rem; letter-spacing: 0.2px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.winner-card h1 {
+  font-family: var(--font-display);
+  margin: 0.3rem 0 1rem;
+  color: var(--ink);
+  font-size: 1.9rem;
+  font-weight: 600;
+  animation: winnerPop 0.5s ease 0.05s both;
+}
+.winner-card img { width: 100%; max-height: 240px; object-fit: cover; border-radius: var(--r-md); margin: 0.5rem 0 1rem; box-shadow: var(--shadow-md); animation: winnerPop 0.5s ease 0.15s both; }
+@keyframes winnerPop { from { opacity: 0; transform: translateY(10px) scale(0.97); } to { opacity: 1; transform: none; } }
+.steps-box {
+  text-align: left;
+  background: var(--surface-muted);
+  padding: 14px;
+  border-radius: var(--r-sm);
+  margin-top: 10px;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid var(--border-soft);
+}
+.steps-box::-webkit-scrollbar { width: 6px; }
+.steps-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 8px; }
+.ing-box { text-align: left; font-size: 0.88rem; line-height: 1.6; color: var(--ink-soft); }
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 30px;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--charcoal);
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 14px 34px rgba(0,0,0,0.35);
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2), opacity 0.25s;
+  max-width: min(90vw, 480px);
+  text-align: center;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.toast.success { background: linear-gradient(135deg, var(--herb), var(--herb-hover)); }
+.toast.warning { background: linear-gradient(135deg, var(--marigold), var(--marigold-hover)); color: var(--ink); }
+.toast.error { background: linear-gradient(135deg, var(--chili), var(--chili-hover)); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .nav-container { padding: 0.8rem 1rem; }
+  .logo { font-size: 1.2rem; }
+  .tab-btn { padding: 8px 12px; font-size: 0.82rem; }
+  .container { padding: 0 0.75rem; margin: 1.2rem auto; }
+  .card { padding: 1.1rem; }
+  .modal-content { padding: 1.4rem; }
+  .recipe-actions { flex-wrap: wrap; }
+  .spin-btn { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-container">
+    <div class="logo">
+      <i class="fa-solid fa-kitchen-set"></i> Thuan Kitchen
+    </div>
+    <div class="nav-tabs">
+      <button class="tab-btn active" data-tab="chef">
+        <i class="fa-solid fa-utensils"></i> Đầu Bếp
+      </button>
+      <button class="tab-btn" data-tab="wheel">
+        <i class="fa-solid fa-dharmachakra"></i> Vòng Quay
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <!-- ============ TAB 1: ĐẦU BẾP ============ -->
+  <div id="chef-tab" class="tab-content active">
+    <div class="chef-grid">
+      <div>
+        <div class="card">
+          <div class="card-title">
+            <span class="icon-badge"><i class="fa-solid fa-basket-shopping"></i></span>
+            Tủ Lạnh Hôm Nay Có Gì?
+          </div>
+
+          <div class="input-label">
+            <i class="fa-solid fa-drumstick-bite" style="color: var(--chili);"></i>
+            Nguyên Liệu Chính (Thịt, cá, hải sản...)
+          </div>
+          <div class="ingredient-input-group">
+            <input type="text" id="mainIngInput" placeholder="VD: Cá, Thịt bò, Gà...">
+            <button class="btn btn-primary btn-icon" id="addMainBtn" title="Thêm">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+          <div class="tags-container" id="mainIngredientsList"></div>
+
+          <div class="input-label">
+            <i class="fa-solid fa-carrot" style="color: var(--herb);"></i>
+            Món Phụ / Rau Củ (Rau, cà chua, cần tây...)
+          </div>
+          <div class="ingredient-input-group">
+            <input type="text" id="subIngInput" placeholder="VD: Cà chua, Cần tây, Bí đỏ...">
+            <button class="btn btn-secondary btn-icon" id="addSubBtn" title="Thêm">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+          <div class="tags-container" id="subIngredientsList"></div>
+          <p class="hint"><i class="fa-solid fa-circle-info"></i> Nhấn Enter hoặc dấu phẩy để thêm nhanh.</p>
+
+          <button class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;" id="generateBtn">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Gợi Ý Món Kết Hợp
+          </button>
+        </div>
+
+        <div class="card">
+          <button class="btn btn-secondary" style="width: 100%;" id="newRecipeBtn">
+            <i class="fa-solid fa-pen-to-square"></i> Tự Thêm Công Thức Mới
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div class="card-title" style="justify-content: space-between;">
+          <span class="title-group">
+            <span class="icon-badge herb"><i class="fa-solid fa-book-bookmark"></i></span>
+            Sổ Tay Món Ăn (<span id="recipeCount">0</span>)
+          </span>
+          <button class="btn btn-secondary" style="padding: 5px 12px; font-size: 0.8rem;" id="resetFilterBtn">
+            Hiện Tất Cả
+          </button>
+        </div>
+        <div class="recipe-list" id="recipeContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 2: VÒNG QUAY ============ -->
+  <div id="wheel-tab" class="tab-content">
+    <div class="wheel-container">
+      <div class="card wheel-wrapper">
+        <div class="wheel-stage">
+          <div class="pointer"></div>
+          <canvas id="wheelCanvas" width="400" height="400"></canvas>
+        </div>
+        <button class="btn btn-primary spin-btn" id="spinBtn">
+          <i class="fa-solid fa-play"></i> QUAY NGAY
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span class="icon-badge chili"><i class="fa-solid fa-list-check"></i></span>
+          Món Ăn Tham Gia Quay
+        </div>
+        <p style="font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 1rem;">
+          Tích chọn ít nhất 2 món để đưa vào vòng quay:
+        </p>
+        <div id="wheelItemsList" class="wheel-checklist"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: RECIPE ============ -->
+<div class="modal" id="recipeModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-content" tabindex="-1">
+    <button class="close-btn" data-close="recipeModal" aria-label="Đóng">&times;</button>
+    <h3 id="modalTitle">Thêm / Chỉnh Sửa Công Thức</h3>
+    <form id="recipeForm">
+      <input type="hidden" id="editRecipeId">
+
+      <div class="form-group">
+        <label>Tên món ăn</label>
+        <input type="text" id="recipeName" required placeholder="VD: Canh chua cá">
+      </div>
+
+      <div class="form-group">
+        <label>Nguyên liệu chính & phụ</label>
+        <textarea id="recipeIngs" rows="4" required placeholder="500g cá lóc&#10;2 quả cà chua&#10;Hành, tỏi, gia vị"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Các bước chế biến</label>
+        <textarea id="recipeSteps" rows="6" required placeholder="1. Sơ chế nguyên liệu...&#10;2. Phi thơm hành tỏi..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Hình ảnh món ăn (tự động nén)</label>
+        <input type="file" id="recipeImgInput" accept="image/*">
+        <img id="imgPreview" class="image-preview" alt="Xem trước">
+        <button type="button" class="btn btn-danger" id="removeImgBtn"
+                style="display:none; margin-top: 8px; padding: 6px 12px; font-size: 0.78rem;">
+          <i class="fa-solid fa-trash"></i> Xoá ảnh
+        </button>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%;">
+        <i class="fa-solid fa-floppy-disk"></i> Lưu Công Thức
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ============ MODAL: WINNER ============ -->
+<div class="modal" id="winnerModal" role="dialog" aria-modal="true" aria-labelledby="winnerTitle">
+  <div class="modal-content winner-card" tabindex="-1">
+    <button class="close-btn" data-close="winnerModal" aria-label="Đóng">&times;</button>
+    <h2><i class="fa-solid fa-kitchen-set"></i> Hôm Nay Ăn Món:</h2>
+    <h1 id="winnerTitle">---</h1>
+    <img id="winnerImg" alt="Món ăn" style="display: none;">
+    <div id="winnerIngredients" class="ing-box"></div>
+    <div id="winnerSteps" class="steps-box"></div>
+    <div style="display:flex; gap:8px; margin-top:1.2rem; justify-content:center; flex-wrap:wrap;">
+      <button class="btn btn-secondary" id="editWinnerBtn">
+        <i class="fa-solid fa-pen"></i> Xem / Sửa công thức
+      </button>
+      <button class="btn btn-primary" id="spinAgainBtn">
+        <i class="fa-solid fa-rotate-right"></i> Quay lại
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TOAST ============ -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   0) TIỆN ÍCH
+   ============================================================ */
+const $  = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+// Escape HTML chống XSS
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+// [P3] Unique ID — tránh trùng khi tạo 2 recipe cùng millisecond
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+// Toast thay cho alert()
+let _toastTimer;
+function toast(msg, type = 'success') {
+  const el = $('#toast');
+  el.textContent = msg;
+  el.className = 'toast show ' + type;
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+// Nén ảnh trước khi lưu
+function compressImage(file, maxSize = 720, quality = 0.78) {
+  return new Promise((resolve, reject) => {
+    if (!file.type.startsWith('image/')) return reject(new Error('not-image'));
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        const scale = Math.min(1, maxSize / Math.max(width, height));
+        width  = Math.max(1, Math.round(width  * scale));
+        height = Math.max(1, Math.round(height * scale));
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        try {
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        } catch (e) { reject(e); }
+      };
+      img.onerror = () => reject(new Error('decode-fail'));
+      img.src = reader.result;
+    };
+    reader.onerror = () => reject(new Error('read-fail'));
+    reader.readAsDataURL(file);
+  });
+}
+
+/* ============================================================
+   1) DATABASE CỨNG 23 MÓN
+   ============================================================ */
+const chefDatabase = [
+  { id: '1', title: 'Thịt kho trứng', keywords: ['thịt', 'thịt heo', 'thịt ba chỉ', 'trứng', 'nước dừa'], ingredients: '500g thịt ba chỉ\n5 quả trứng vịt luộc\n1 trái nước dừa tươi\nHành, tỏi, nước mắm, đường', steps: '1. Thái thịt miếng vuông vừa ăn, ướp hành tỏi, nước mắm, đường.\n2. Luộc trứng và bóc vỏ.\n3. Thắng nước màu, cho thịt vào xào săn.\n4. Đổ nước dừa tươi vào ninh nhỏ lửa, cho trứng vào kho đến khi thịt mềm sánh.', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=500' },
+  { id: '2', title: 'Cơm tấm sườn', keywords: ['cơm', 'sườn', 'thịt heo', 'sườn nướng', 'gạo tấm'], ingredients: '500g sườn chặt\nGạo tấm\nHành lá, tỏi, sả, mật ong, nước mắm', steps: '1. Ướp sườn với sả, tỏi, mật ong, nước mắm, ít dầu ăn trong 1 tiếng.\n2. Nấu cơm tấm chín tới.\n3. Nướng sườn trên bếp than hoặc nồi chiên không dầu.\n4. Làm mỡ hành rưới lên cơm và thưởng thức cùng nước mắm chua ngọt.', image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500' },
+  { id: '3', title: 'Gà chiên nước mắm', keywords: ['gà', 'thịt gà', 'cánh gà', 'đùi gà', 'nước mắm', 'tỏi'], ingredients: '500g cánh/đùi gà\n3 muỗng nước mắm\n1 củ tỏi băm, đường, tỏi, ớt', steps: '1. Gà rửa sạch, luộc sơ hoặc quay vi sóng cho nhanh chín.\n2. Chiên gà ngập dầu cho vàng giòn.\n3. Pha nước mắm, đường, tỏi băm, ớt.\n4. Phi thơm tỏi, cho hỗn hợp nước mắm vào đun sệt rồi đảo gà chiên vào thấm vị.', image: 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=500' },
+  { id: '4', title: 'Gà nướng', keywords: ['gà', 'thịt gà', 'gà nguyên con', 'mật ong', 'sả'], ingredients: '1kg thịt gà\nSả, tỏi, ớt, mật ong, dầu hào, ngũ vị hương', steps: '1. Gà làm sạch, đập dập sả tỏi.\n2. Trộn sốt ướp gồm mật ong, dầu hào, ngũ vị hương, sả tỏi băm.\n3. Ướp gà ít nhất 2 tiếng.\n4. Nướng gà ở 180-200 độ C trong 35-40 phút cho chín vàng đều.', image: 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=500' },
+  { id: '5', title: 'Canh bí đỏ', keywords: ['bí đỏ', 'thịt băm', 'thịt heo', 'tôm', 'canh'], ingredients: '300g bí đỏ\n150g thịt băm hoặc tôm tươi\nHành lá, ngò ôm, gia vị', steps: '1. Bí đỏ gọt vỏ, cắt miếng vừa ăn.\n2. Phi thơm hành, xào thịt băm/tôm cho săn.\n3. Đổ nước vào đun sôi, cho bí đỏ vào nấu mềm.\n4. Nêm nếm vừa ăn, rắc hành ngò lên trên.', image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=500' },
+  { id: '6', title: 'Rau muống xào tỏi', keywords: ['rau muống', 'rau', 'tỏi'], ingredients: '1 bó rau muống\n2 củ tỏi băm\nDầu ăn, hạt nêm, nước mắm', steps: '1. Rau muống nhặt rửa sạch, luộc sơ qua nước sôi có chút muối.\n2. Vớt rau ra tô nước đá cho xanh giòn.\n3. Phi thơm tỏi băm với dầu ăn.\n4. Cho rau muống vào xào lửa lớn, nêm hạt nêm và nước mắm nhanh tay.', image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500' },
+  { id: '7', title: 'Đậu hũ nhồi thịt sốt cà', keywords: ['đậu hũ', 'đậu phụ', 'thịt băm', 'thịt heo', 'cà chua'], ingredients: '4 miếng đậu hũ trắng\n150g thịt băm\n2 quả cà chua\nNấm mèo, hành tím, gia vị', steps: '1. Trộn thịt băm với nấm mèo thái nhỏ, gia vị.\n2. Rạch thân đậu hũ, nhồi thịt vào giữa rồi chiên vàng mặt thịt.\n3. Cà chua bằm nhỏ, xào nhừ làm sốt.\n4. Cho đậu hũ vào sốt cà đun nhỏ lửa 10 phút cho ngấm.', image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500' },
+  { id: '8', title: 'Tôm rim thịt', keywords: ['tôm', 'thịt ba chỉ', 'thịt heo', 'hành tím'], ingredients: '200g tôm tươi\n200g thịt ba chỉ\nHành tím, tỏi, nước mắm, đường, tiêu', steps: '1. Thịt ba chỉ thái mỏng, tôm cắt bỏ đầu chân.\n2. Rán cháy cạnh thịt ba chỉ cho ra bớt mỡ.\n3. Cho tôm vào đảo cùng thịt đến khi tôm đổi màu.\n4. Cho nước mắm, đường, tiêu rim nhỏ lửa cho đến khi cạn sệt.', image: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=500' },
+  { id: '9', title: 'Gà áp chảo sốt mắm', keywords: ['gà', 'thịt gà', 'đùi gà', 'nước mắm', 'tỏi', 'ớt'], ingredients: '400g đùi gà góc tư hoặc ức gà\n2 muỗng nước mắm, đường, tỏi, ớt, bơ', steps: '1. Gà lọc xương hoặc đập mỏng, ướp ít tiêu hạt nêm.\n2. Áp chảo gà cho vàng giòn 2 mặt.\n3. Đun chảy bơ, cho tỏi ớt băm và nước mắm đường vào tạo sốt sệt.\n4. Cho gà vào rưới sốt đảo đều cho ngấm.', image: 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=500' },
+  { id: '10', title: 'Trứng chiên', keywords: ['trứng', 'trứng gà', 'trứng vịt', 'hành lá'], ingredients: '3 quả trứng gà/vịt\nHành lá, nước mắm, hạt nêm, tiêu', steps: '1. Đập trứng ra bát, thêm hành lá thái nhỏ, hạt nêm, chút nước mắm, tiêu.\n2. Đánh tan đều hỗn hợp trứng.\n3. Đun nóng dầu ăn trên chảo, đổ trứng vào chiên vàng đều 2 mặt.', image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=500' },
+  { id: '11', title: 'Bún bò Huế', keywords: ['bún', 'bò', 'thịt bò', 'giò heo', 'sả', 'mắm ruốc'], ingredients: '500g bắp bò, giò heo\n1kg bún tươi\nSả, ớt, mắm ruốc Huế, rau sống', steps: '1. Bắp bò và giò heo luộc sơ, rửa sạch.\n2. Ninh xương cùng sả đập dập.\n3. Pha mắm ruốc Huế lọc lấy nước trong cho vào nồi nước dùng.\n4. Thêm màu điều, gia vị. Xếp bún, thịt bắp bò, giò heo ra tô rồi chan nước dùng.', image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=500' },
+  { id: '12', title: 'Mì xào hải sản', keywords: ['mì', 'mì tôm', 'mực', 'tôm', 'hải sản', 'cần tây', 'cải ngọt'], ingredients: '2 vắt mì\n100g tôm, 100g mực\nRau cải ngọt, cần tây, cà rốt', steps: '1. Trụng sơ mì qua nước sôi vớt ra ráo.\n2. Hải sản làm sạch, xào chín tới rồi múc ra đĩa.\n3. Xào rau cải, cà rốt, cần tây.\n4. Cho mì và hải sản vào xào chung lửa lớn, nêm dầu hào gia vị.', image: 'https://images.unsplash.com/photo-1612927601601-6638404737ce?w=500' },
+  { id: '13', title: 'Cơm chiên trứng', keywords: ['cơm', 'trứng', 'tỏi', 'hành lá'], ingredients: '2 bát cơm nguội\n2 quả trứng gà\nHành lá, tỏi, hạt nêm, nước mắm', steps: '1. Bóp đều cơm nguội với 1 lòng đỏ trứng gà.\n2. Phi thơm tỏi băm với dầu ăn.\n3. Cho cơm vào chiên đảo đều tay trên lửa lớn cho hạt cơm săn lại.\n4. Cho nốt quả trứng còn lại và hành lá vào đảo đều, nêm gia vị vừa ăn.', image: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=500' },
+  { id: '14', title: 'Thịt heo xào mắm ruốc', keywords: ['thịt heo', 'thịt ba chỉ', 'thịt', 'mắm ruốc', 'sả', 'ớt'], ingredients: '400g thịt ba chỉ\n3 muỗng mắm ruốc\nSả băm, tỏi, ớt, đường', steps: '1. Thịt ba chỉ thái xắt hạt lựu hoặc mỏng nhỏ.\n2. Phi thơm tỏi, sả băm và ớt.\n3. Cho thịt ba chỉ vào xào săn chảy bớt mỡ.\n4. Pha mắm ruốc với đường và nước ấm, đổ vào xào cùng thịt nhỏ lửa đến khi sệt lại.', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=500' },
+  { id: '15', title: 'Thịt cuốn bánh tráng', keywords: ['thịt heo', 'thịt ba chỉ', 'bánh tráng', 'rau sống', 'mắm nêm'], ingredients: '500g thịt ba chỉ\nBánh tráng, dưa leo, chuối chát, rau sống các loại\nMắm nêm, tỏi, ớt, dứa (thơm)', steps: '1. Thịt ba chỉ luộc chín tới, vớt ra thái mỏng.\n2. Rửa sạch các loại rau sống, dưa leo xắt lát dài.\n3. Pha mắm nêm với dứa băm nhỏ, tỏi ớt, đường.\n4. Cuốn thịt, rau sống vào bánh tráng và chấm mắm nêm.', image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500' },
+  { id: '16', title: 'Cà tím hấp cơm', keywords: ['cà tím', 'mỡ hành', 'nước mắm', 'tỏi', 'ớt'], ingredients: '2 quả cà tím\nHành lá, tỏi, ớt, nước mắm, đường', steps: '1. Cà tím rửa sạch, cắt khúc vừa ăn.\n2. Cho cà tím vào nồi hấp chín tới khi dẻo béo.\n3. Làm mỡ hành đun nóng.\n4. Pha nước mắm tỏi ớt chua ngọt. Rưới mỡ hành và nước mắm lên cà tím hấp.', image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500' },
+  { id: '17', title: 'Ốc hương sốt bơ tỏi', keywords: ['ốc', 'ốc hương', 'bơ', 'tỏi', 'hải sản'], ingredients: '400g ốc hương\n1 củ tỏi băm lớn\n50g bơ lạt, đường, nước mắm', steps: '1. Ốc hương ngâm rửa sạch, luộc sơ với sả.\n2. Phi thơm tỏi băm với dầu ăn cho vàng giòn vớt ra một nửa.\n3. Cho bơ lạt vào chảo đun chảy, thêm chút nước mắm, đường.\n4. Đổ ốc hương vào đảo đều lửa lớn cho thấm sốt bơ tỏi.', image: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=500' },
+  { id: '18', title: 'Sườn xào chua ngọt', keywords: ['sườn', 'sườn heo', 'thịt heo', 'cà chua', 'hành tây', 'ớt chuông'], ingredients: '500g sườn thắt lưng/sườn non\nCà chua, hành tây, ớt chuông\nGiấm, đường, nước mắm, tỏi', steps: '1. Sườn chặt khúc, chần qua nước sôi rồi rán vàng mặt.\n2. Pha sốt chua ngọt: giấm, đường, nước mắm, tương ớt, nước lọc.\n3. Phi thơm tỏi, xào hành tây và ớt chuông.\n4. Cho sườn và nước sốt vào rim nhỏ lửa đến khi nước sốt sệt lại ôm lấy sườn.', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=500' },
+  { id: '19', title: 'Bò xào', keywords: ['bò', 'thịt bò', 'cần tây', 'hành tây', 'ớt chuông'], ingredients: '300g thịt bò\nHành tây, cần tây hoặc măng tây\nTỏi, dầu hào, tiêu', steps: '1. Thịt bò thái mỏng, ướp tỏi băm, dầu hào, tiêu, chút dầu ăn.\n2. Phi thơm tỏi, xào thịt bò lửa lớn cho vừa chín tới vớt ra đĩa.\n3. Cho hành tây, cần tây vào xào chín giòn.\n4. Trút thịt bò vào đảo lại nhanh tay 30 giây rồi tắt bếp.', image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=500' },
+  { id: '20', title: 'Mực xào cần tây', keywords: ['mực', 'cần tây', 'hành tây', 'cà chua', 'hải sản'], ingredients: '400g mực ống tươi\nCần tây, tỏi tây, hành tây, cà chua\nTỏi, gừng, dầu hào', steps: '1. Mực làm sạch, khứa vảy rồng, cắt khúc, chần sơ với gừng.\n2. Phi thơm tỏi, xào mực lửa lớn cho săn rồi múc ra đĩa.\n3. Cho cà chua, hành tây, cần tây vào xào chín giòn.\n4. Trút mực vào xào chung, nêm nếm gia vị vừa ăn.', image: 'https://images.unsplash.com/photo-1612927601601-6638404737ce?w=500' },
+  { id: '21', title: 'Cá kho tộ', keywords: ['cá', 'cá hú', 'cá lóc', 'cá trắm', 'thịt ba chỉ', 'nước mắm'], ingredients: '500g cá (cá lóc/cá hú/cá trắm)\n100g thịt ba chỉ\nHành tím, tỏi, ớt, nước mắm, đường, tiêu', steps: '1. Cá rửa sạch xát muối, ướp nước mắm, đường, hành tỏi băm, tiêu 30 phút.\n2. Thắng nước màu rồi cho thịt ba chỉ vào đảo chiên bớt mỡ.\n3. Xếp cá vào tộ đất cùng thịt ba chỉ.\n4. Đun sôi rồi hạ nhỏ lửa rim riêu đến khi nước kho kẹo sánh lại.', image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500' },
+  { id: '22', title: 'Cháo gà', keywords: ['gà', 'thịt gà', 'gạo', 'cháo', 'hành lá', 'tía tô'], ingredients: '1/2 con gà\n1 bát gạo (pha chút gạo nếp)\nHành lá, tía tô, gừng, tiêu', steps: '1. Luộc gà với gừng tươi lấy nước dùng ngọt, xé phay thịt gà.\n2. Gạo vo sạch, rang sơ rồi cho vào nước luộc gà ninh nhừ thành cháo.\n3. Nêm nếm cháo vừa vị.\n4. Múc cháo ra tô, rắc thịt gà xé, hành lá, tía tô và nhiều tiêu đen.', image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=500' },
+  { id: '23', title: 'Bánh xèo', keywords: ['bột bánh xèo', 'tôm', 'thịt ba chỉ', 'giá đỗ', 'rau sống'], ingredients: '1 gói bột bánh xèo\n200g tôm, 200g thịt ba chỉ\nGiá đỗ, hành lá, rau sống các loại\nNước mắm chua ngọt', steps: '1. Pha bột bánh xèo với nước và hành lá cắt nhỏ theo hướng dẫn.\n2. Tôm thịt xào sơ qua cho chín tới.\n3. Tráng lớp dầu mỏng, múc bột vào chảo xoay tròn, cho tôm thịt giá đỗ vào giữa.\n4. Đậy nắp 2 phút cho bánh giòn rụm rồi gập đôi ra đĩa.', image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500' }
+];
+
+/* ============================================================
+   2) STATE + PERSISTENCE
+   ============================================================ */
+const STORAGE_RECIPES = 'myRecipes_v6';
+const STORAGE_WHEEL   = 'selectedWheel_v6';
+
+let recipes = [];
+let filteredRecipes = null;
+let selectedWheelIds = [];
+let mainIngredients = [];
+let subIngredients = [];
+let base64TmpImage = '';
+
+function persistRecipes() {
+  try {
+    localStorage.setItem(STORAGE_RECIPES, JSON.stringify(recipes));
+    return true;
+  } catch (e) {
+    toast('⚠️ Bộ nhớ đã đầy! Hãy xoá bớt ảnh hoặc công thức cũ.', 'error');
+    return false;
+  }
+}
+
+function persistWheelSelection() {
+  try {
+    localStorage.setItem(STORAGE_WHEEL, JSON.stringify(selectedWheelIds));
+  } catch (e) { /* silent */ }
+}
+
+/* [P2] Commit wrapper có rollback — dùng cho mọi thao tác mutate recipes */
+function commitRecipes(mutator) {
+  const backupRecipes  = recipes.slice();
+  const backupFiltered = filteredRecipes;
+  const backupWheel    = selectedWheelIds.slice();
+  try {
+    mutator();
+    if (!persistRecipes()) throw new Error('persist-fail');
+    return true;
+  } catch (err) {
+    recipes           = backupRecipes;
+    filteredRecipes   = backupFiltered;
+    selectedWheelIds  = backupWheel;
+    renderRecipeCards();
+    renderWheelChecklist();
+    drawWheel();
+    toast('Không lưu được — đã khôi phục dữ liệu cũ.', 'error');
+    return false;
+  }
+}
+
+function initData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_RECIPES);
+    const parsed = raw ? JSON.parse(raw) : null;
+    recipes = Array.isArray(parsed) && parsed.length ? parsed : JSON.parse(JSON.stringify(chefDatabase));
+  } catch (e) {
+    recipes = JSON.parse(JSON.stringify(chefDatabase));
+  }
+
+  try {
+    selectedWheelIds = JSON.parse(localStorage.getItem(STORAGE_WHEEL) || '[]');
+    if (!Array.isArray(selectedWheelIds)) selectedWheelIds = [];
+  } catch (e) { selectedWheelIds = []; }
+
+  sanitizeSelection();
+  renderRecipeCards();
+}
+
+function sanitizeSelection() {
+  const validIds = new Set(recipes.map(r => r.id));
+  const before = selectedWheelIds.length;
+  selectedWheelIds = selectedWheelIds.filter(id => validIds.has(id));
+  if (before !== selectedWheelIds.length) persistWheelSelection();
+}
+
+/* ============================================================
+   3) TAB SWITCHING
+   ============================================================ */
+$$('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+
+function switchTab(tab) {
+  $$('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  $$('.tab-content').forEach(c => c.classList.toggle('active', c.id === tab + '-tab'));
+  if (tab === 'wheel') {
+    requestAnimationFrame(() => { fitCanvas(); drawWheel(); });
+  }
+}
+
+/* ============================================================
+   4) INGREDIENTS
+   ============================================================ */
+function addMainIngredient() {
+  const input = $('#mainIngInput');
+  const val = input.value.trim().toLowerCase();
+  if (val && !mainIngredients.includes(val)) {
+    mainIngredients.push(val);
+    renderMainIngredients();
+  }
+  input.value = '';
+  input.focus();
+}
+
+function addSubIngredient() {
+  const input = $('#subIngInput');
+  const val = input.value.trim().toLowerCase();
+  if (val && !subIngredients.includes(val)) {
+    subIngredients.push(val);
+    renderSubIngredients();
+  }
+  input.value = '';
+  input.focus();
+}
+
+function removeMainIngredient(i) { mainIngredients.splice(i, 1); renderMainIngredients(); }
+function removeSubIngredient(i)  { subIngredients.splice(i, 1);  renderSubIngredients(); }
+
+function renderMainIngredients() {
+  const el = $('#mainIngredientsList');
+  el.innerHTML = mainIngredients.map((ing, i) => `
+    <div class="tag tag-main">
+      ${esc(ing)}
+      <i class="fa-solid fa-circle-xmark" data-remove-main="${i}" role="button" aria-label="Xoá"></i>
+    </div>
+  `).join('');
+}
+
+function renderSubIngredients() {
+  const el = $('#subIngredientsList');
+  el.innerHTML = subIngredients.map((ing, i) => `
+    <div class="tag tag-sub">
+      ${esc(ing)}
+      <i class="fa-solid fa-circle-xmark" data-remove-sub="${i}" role="button" aria-label="Xoá"></i>
+    </div>
+  `).join('');
+}
+
+$('#mainIngredientsList').addEventListener('click', e => {
+  const t = e.target.closest('[data-remove-main]');
+  if (t) removeMainIngredient(+t.dataset.removeMain);
+});
+$('#subIngredientsList').addEventListener('click', e => {
+  const t = e.target.closest('[data-remove-sub]');
+  if (t) removeSubIngredient(+t.dataset.removeSub);
+});
+
+$('#addMainBtn').addEventListener('click', addMainIngredient);
+$('#addSubBtn').addEventListener('click', addSubIngredient);
+$('#mainIngInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addMainIngredient(); }
+});
+$('#subIngInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addSubIngredient(); }
+});
+
+/* ============================================================
+   5) SINH MÓN GỢI Ý
+   ============================================================ */
+$('#generateBtn').addEventListener('click', generateRecipes);
+
+function generateRecipes() {
+  if (mainIngredients.length === 0 && subIngredients.length === 0) {
+    toast('Vui lòng nhập ít nhất 1 nguyên liệu!', 'warning');
+    return;
+  }
+
+  const results = [];
+  recipes.forEach(r => {
+    const text = (r.title + ' ' + (r.keywords ? r.keywords.join(' ') : '') + ' ' + (r.ingredients || '')).toLowerCase();
+    const mainMatched = mainIngredients.some(m => text.includes(m));
+    const subMatched  = subIngredients.some(s => text.includes(s));
+
+    if (mainIngredients.length > 0 && subIngredients.length > 0) {
+      if (mainMatched && subMatched) results.push(r);
+    } else if (mainIngredients.length > 0) {
+      if (mainMatched) results.push(r);
+    } else {
+      if (subMatched) results.push(r);
+    }
+  });
+
+  if (results.length > 0) {
+    filteredRecipes = results;
+    renderRecipeCards();
+    toast(`Đã tìm thấy ${results.length} món phù hợp! 🍽️`);
+    return;
+  }
+
+  // Không có → tự tạo
+  const mainStr = mainIngredients.join(', ');
+  const subStr  = subIngredients.join(', ');
+  const newTitle = generateDishTitle(mainIngredients, subIngredients);
+
+  const autoRecipe = {
+    id: uid(),
+    title: newTitle,
+    keywords: [...mainIngredients, ...subIngredients],
+    ingredients: `• Nguyên liệu chính: ${mainStr || '(không có)'}\n• Nguyên liệu phụ: ${subStr || '(không có)'}\n• Gia vị: Tỏi, hành, hạt nêm, nước mắm, tiêu, dầu ăn`,
+    steps: `1. Sơ chế làm sạch ${mainStr || 'nguyên liệu chính'} và cắt nhỏ ${subStr || 'rau củ'}.\n2. Phi thơm hành tỏi với dầu ăn trên chảo nóng.\n3. Cho ${mainStr || 'nguyên liệu chính'} vào xào săn, sau đó cho ${subStr || 'rau củ'} vào đảo đều lửa lớn.\n4. Nêm nếm gia vị vừa ăn, tắt bếp và trình bày ra đĩa.`,
+    image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500'
+  };
+
+  const ok = commitRecipes(() => {
+    recipes.unshift(autoRecipe);
+    filteredRecipes = [autoRecipe];
+  });
+
+  if (ok) {
+    renderRecipeCards();
+    toast(`Đã tạo món mới: "${newTitle}" và lưu vào sổ tay! ✨`);
+  }
+}
+
+function generateDishTitle(mains, subs) {
+  const mainText = mains.map(capitalizeFirstLetter).join(' ');
+  const subText  = subs.map(capitalizeFirstLetter).join(' ');
+  if (mains.length > 0 && subs.length > 0) return `${mainText} xào ${subText}`;
+  if (mains.length > 0) return `${mainText} xào tỏi / nấu canh`;
+  return `Rau củ xào ${subText}`;
+}
+function capitalizeFirstLetter(s) {
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+}
+
+$('#resetFilterBtn').addEventListener('click', () => {
+  filteredRecipes = null;
+  renderRecipeCards();
+});
+
+/* ============================================================
+   6) RENDER RECIPE CARDS
+   ============================================================ */
+function renderRecipeCards() {
+  const list = filteredRecipes !== null ? filteredRecipes : recipes;
+  const container = $('#recipeContainer');
+  $('#recipeCount').textContent = list.length;
+
+  if (list.length === 0) {
+    container.innerHTML = '<p style="color: #636e72; padding: 1rem 0;">Không tìm thấy món ăn phù hợp.</p>';
+    return;
+  }
+
+  container.innerHTML = list.map(r => {
+    const ingPreview = (r.ingredients || '').replace(/\n/g, ', ');
+    const imgSrc = r.image || 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=500';
+    return `
+      <div class="recipe-card" data-recipe-id="${esc(r.id)}">
+        <img src="${esc(imgSrc)}" class="recipe-img" alt="${esc(r.title)}" loading="lazy">
+        <div class="recipe-body">
+          <div class="recipe-title">${esc(r.title)}</div>
+          <div class="recipe-ingredients"><i class="fa-solid fa-carrot"></i> ${esc(ingPreview)}</div>
+          <div class="recipe-actions">
+            <button class="btn btn-secondary" data-action="edit">
+              <i class="fa-solid fa-pen"></i> Xem / Sửa
+            </button>
+            <button class="btn btn-danger" data-action="delete">
+              <i class="fa-solid fa-trash"></i> Xoá
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+$('#recipeContainer').addEventListener('click', e => {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const card = btn.closest('[data-recipe-id]');
+  const id = card.dataset.recipeId;
+  const action = btn.dataset.action;
+  if (action === 'edit') openEditModal(id);
+  if (action === 'delete') deleteRecipe(id);
+});
+
+function deleteRecipe(id) {
+  if (!confirm('Bạn có chắc muốn xoá món ăn này?')) return;
+
+  const ok = commitRecipes(() => {
+    recipes = recipes.filter(r => r.id !== id);
+    if (filteredRecipes) filteredRecipes = filteredRecipes.filter(r => r.id !== id);
+    selectedWheelIds = selectedWheelIds.filter(wId => wId !== id);
+    persistWheelSelection();
+  });
+
+  if (ok) {
+    renderRecipeCards();
+    renderWheelChecklist();
+    drawWheel();
+    toast('Đã xoá món ăn.');
+  }
+}
+
+/* ============================================================
+   7) MODAL EDIT RECIPE (có focus trap)
+   ============================================================ */
+let _lastFocused = null;
+
+function _getFocusable(container) {
+  return Array.from(container.querySelectorAll(
+    'a[href],button:not([disabled]),textarea:not([disabled]),' +
+    'input:not([disabled]):not([type="hidden"]),select:not([disabled]),' +
+    '[tabindex]:not([tabindex="-1"])'
+  )).filter(el => el.offsetParent !== null);
+}
+
+function openEditModal(id = null) {
+  _lastFocused = document.activeElement;
+  const modal = $('#recipeModal');
+  const imgPreview = $('#imgPreview');
+  const removeImgBtn = $('#removeImgBtn');
+  base64TmpImage = '';
+
+  if (id) {
+    const recipe = recipes.find(r => r.id === id);
+    if (!recipe) return;
+    $('#modalTitle').textContent = 'Chỉnh Sửa Công Thức';
+    $('#editRecipeId').value = recipe.id;
+    $('#recipeName').value = recipe.title;
+    $('#recipeIngs').value = recipe.ingredients || '';
+    $('#recipeSteps').value = recipe.steps || '';
+
+    if (recipe.image) {
+      imgPreview.src = recipe.image;
+      imgPreview.style.display = 'block';
+      removeImgBtn.style.display = 'inline-flex';
+      base64TmpImage = recipe.image;
+    } else {
+      imgPreview.src = '';
+      imgPreview.style.display = 'none';
+      removeImgBtn.style.display = 'none';
+    }
+  } else {
+    $('#modalTitle').textContent = 'Thêm Công Thức Mới';
+    $('#recipeForm').reset();
+    $('#editRecipeId').value = '';
+    imgPreview.src = '';
+    imgPreview.style.display = 'none';
+    removeImgBtn.style.display = 'none';
+  }
+
+  $('#recipeImgInput').value = '';
+  modal.classList.add('active');
+
+  // Focus vào input đầu tiên
+  requestAnimationFrame(() => {
+    const box = modal.querySelector('.modal-content');
+    const first = box && _getFocusable(box)[0];
+    if (first) first.focus();
+  });
+}
+
+function closeModal(modalId) {
+  const m = document.getElementById(modalId);
+  if (m) m.classList.remove('active');
+  // Trả focus về nơi cũ
+  if (_lastFocused && typeof _lastFocused.focus === 'function') {
+    try { _lastFocused.focus({ preventScroll: true }); } catch(e){}
+  }
+  _lastFocused = null;
+}
+
+// Đóng modal: nút X, backdrop, ESC
+$$('[data-close]').forEach(btn => {
+  btn.addEventListener('click', () => closeModal(btn.dataset.close));
+});
+$$('.modal').forEach(m => {
+  m.addEventListener('click', e => {
+    if (e.target === m) closeModal(m.id);
+  });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') $$('.modal.active').forEach(m => closeModal(m.id));
+});
+
+// [P4] Focus trap — Tab xoay vòng trong modal
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Tab') return;
+  const box = document.querySelector('.modal.active .modal-content');
+  if (!box) return;
+  const list = _getFocusable(box);
+  if (!list.length) return;
+  const first = list[0];
+  const last  = list[list.length - 1];
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault(); last.focus();
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault(); first.focus();
+  }
+});
+
+$('#newRecipeBtn').addEventListener('click', () => openEditModal());
+
+// Preview ảnh + nén
+$('#recipeImgInput').addEventListener('change', async function () {
+  const file = this.files && this.files[0];
+  if (!file) return;
+  try {
+    const compressed = await compressImage(file);
+    base64TmpImage = compressed;
+    const imgPreview = $('#imgPreview');
+    imgPreview.src = compressed;
+    imgPreview.style.display = 'block';
+    $('#removeImgBtn').style.display = 'inline-flex';
+    toast('Ảnh đã được nén và sẵn sàng 📸', 'success');
+  } catch (err) {
+    toast('Không đọc được ảnh. Thử file khác nhé!', 'error');
+  }
+});
+
+$('#removeImgBtn').addEventListener('click', () => {
+  base64TmpImage = '';
+  $('#imgPreview').src = '';
+  $('#imgPreview').style.display = 'none';
+  $('#removeImgBtn').style.display = 'none';
+  $('#recipeImgInput').value = '';
+});
+
+// Submit form — dùng commitRecipes để rollback nếu persist fail
+$('#recipeForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const id = $('#editRecipeId').value;
+  const title = $('#recipeName').value.trim();
+  const ingredients = $('#recipeIngs').value.trim();
+  const steps = $('#recipeSteps').value.trim();
+
+  if (!title || !ingredients || !steps) {
+    toast('Vui lòng điền đủ tên, nguyên liệu và các bước.', 'warning');
+    return;
+  }
+
+  const ok = commitRecipes(() => {
+    if (id) {
+      const idx = recipes.findIndex(r => r.id === id);
+      if (idx > -1) {
+        recipes[idx] = {
+          ...recipes[idx],
+          title, ingredients, steps,
+          image: base64TmpImage || recipes[idx].image
+        };
+      }
+    } else {
+      recipes.unshift({
+        id: uid(),
+        title, ingredients, steps,
+        image: base64TmpImage || 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=500'
+      });
+    }
+    if (filteredRecipes) filteredRecipes = null;
+  });
+
+  if (ok) {
+    renderRecipeCards();
+    renderWheelChecklist();
+    drawWheel();
+    closeModal('recipeModal');
+    toast(id ? 'Đã cập nhật công thức ✨' : 'Đã thêm công thức mới 🎉');
+  }
+});
+
+/* ============================================================
+   8) WHEEL
+   ============================================================ */
+const canvas = $('#wheelCanvas');
+const ctx = canvas.getContext('2d');
+let currentAngle = 0;
+let isSpinning = false;
+let canvasSize = 400;
+let selectedWinner = null;
+const colors = ['#ff6b6b', '#4ecdc4', '#ffeaa7', '#a29bfe', '#fd79a8', '#74b9ff', '#55efc4', '#fab1a0'];
+
+// Canvas responsive + devicePixelRatio
+function fitCanvas() {
+  const stage = canvas.parentElement;
+  if (!stage) return;
+  const stageWidth = stage.clientWidth || 400;
+  const size = Math.max(240, Math.min(440, stageWidth));
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  if (canvas._size === size && canvas._dpr === dpr) return;
+  canvas._size = size;
+  canvas._dpr = dpr;
+  canvas.style.width = size + 'px';
+  canvas.style.height = size + 'px';
+  canvas.width = Math.round(size * dpr);
+  canvas.height = Math.round(size * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  canvasSize = size;
+}
+
+function getActiveWheelItems() {
+  return recipes.filter(r => selectedWheelIds.includes(r.id));
+}
+
+function renderWheelChecklist() {
+  const container = $('#wheelItemsList');
+  if (recipes.length === 0) {
+    container.innerHTML = '<p style="color:#636e72;">Chưa có món ăn nào trong Sổ Tay.</p>';
+    updateSpinButton();
+    return;
+  }
+
+  container.innerHTML = recipes.map(r => {
+    const checked = selectedWheelIds.includes(r.id);
+    return `
+      <div class="checklist-item ${checked ? 'checked' : ''}" data-check-id="${esc(r.id)}">
+        <label>
+          <input type="checkbox" ${checked ? 'checked' : ''} data-toggle-id="${esc(r.id)}">
+          ${esc(r.title)}
+        </label>
+      </div>
+    `;
+  }).join('');
+
+  updateSpinButton();
+}
+
+/* [P1] Fix double-toggle: CHỈ lắng nghe 'change'.
+   Browser tự fire change khi user click vào label HOẶC input.
+   Không cần thêm listener 'click' thủ công → không bao giờ double. */
+$('#wheelItemsList').addEventListener('change', e => {
+  const cb = e.target.closest('input[type="checkbox"][data-toggle-id]');
+  if (!cb) return;
+  toggleWheelItem(cb.dataset.toggleId);
+});
+
+// Cho phép click vào padding của hàng (không phải label/input) cũng toggle
+// → dùng cb.click() để browser tự fire change, KHÔNG tự toggle
+$('#wheelItemsList').addEventListener('click', e => {
+  if (e.target.closest('label, input')) return;
+  const item = e.target.closest('.checklist-item');
+  if (!item) return;
+  const cb = item.querySelector('input[type="checkbox"]');
+  if (cb && !cb.disabled) cb.click();
+});
+
+function toggleWheelItem(id) {
+  const idx = selectedWheelIds.indexOf(id);
+  if (idx > -1) selectedWheelIds.splice(idx, 1);
+  else selectedWheelIds.push(id);
+  persistWheelSelection();
+
+  // Cập nhật cục bộ thay vì re-render cả list
+  const row = document.querySelector(`.checklist-item[data-check-id="${CSS.escape(id)}"]`);
+  if (row) {
+    const checked = selectedWheelIds.includes(id);
+    row.classList.toggle('checked', checked);
+    const cb = row.querySelector('input[type="checkbox"]');
+    if (cb) cb.checked = checked;
+  }
+  updateSpinButton();
+  drawWheel();
+}
+
+function updateSpinButton() {
+  const n = getActiveWheelItems().length;
+  $('#spinBtn').disabled = n < 2 || isSpinning;
+}
+
+function drawWheel() {
+  const items = getActiveWheelItems();
+  const n = items.length;
+  const size = canvasSize;
+  const cx = size / 2;
+  const cy = size / 2;
+  const radius = size / 2 - 6;
+
+  ctx.clearRect(0, 0, size, size);
+
+  if (n === 0) {
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+    ctx.fillStyle = '#eef1f4';
+    ctx.fill();
+    ctx.strokeStyle = '#dfe6e9';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = '#95a5a6';
+    ctx.font = `600 ${Math.max(12, size * 0.035)}px 'Plus Jakarta Sans', system-ui, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('Chọn món ở cột phải', cx, cy);
+    return;
+  }
+
+  const arc = (Math.PI * 2) / n;
+
+  for (let i = 0; i < n; i++) {
+    const a0 = currentAngle + i * arc;
+    const a1 = a0 + arc;
+    const mid = a0 + arc / 2;
+
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, a0, a1);
+    ctx.closePath();
+    ctx.fillStyle = colors[i % colors.length];
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(mid);
+    const flipped = Math.cos(mid) < 0;
+    if (flipped) ctx.rotate(Math.PI);
+    ctx.fillStyle = '#2d3436';
+    ctx.font = `700 ${Math.max(10, Math.min(15, 180 / n))}px 'Plus Jakarta Sans', system-ui, sans-serif`;
+    ctx.textBaseline = 'middle';
+    const maxChars = Math.max(8, Math.floor(18 - n / 3));
+    let label = items[i].title;
+    if (label.length > maxChars) label = label.slice(0, maxChars - 1) + '…';
+    if (flipped) {
+      ctx.textAlign = 'left';
+      ctx.fillText(label, -radius * 0.82, 0);
+    } else {
+      ctx.textAlign = 'right';
+      ctx.fillText(label, radius * 0.82, 0);
+    }
+    ctx.restore();
+  }
+
+  ctx.beginPath();
+  ctx.arc(cx, cy, Math.max(14, size * 0.05), 0, 2 * Math.PI);
+  ctx.fillStyle = 'rgba(45, 52, 54, 0.9)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+/* ---- SPIN (đã fix jump) ---- */
+$('#spinBtn').addEventListener('click', spinWheel);
+
+function spinWheel() {
+  if (isSpinning) return;
+  const items = getActiveWheelItems();
+  if (items.length < 2) {
+    toast('Cần ít nhất 2 món để quay!', 'warning');
+    return;
+  }
+  isSpinning = true;
+  updateSpinButton();
+
+  const n = items.length;
+  const arc = (Math.PI * 2) / n;
+
+  // Chọn trước món thắng → đảm bảo kim chỉ đúng
+  const winnerIdx = Math.floor(Math.random() * n);
+  const jitter = (Math.random() - 0.5) * arc * 0.7;
+
+  const targetAbsolute = -Math.PI / 2 - (winnerIdx + 0.5) * arc + jitter;
+
+  // Cộng dồn từ currentAngle — không nhảy về 0
+  const startAngle = currentAngle;
+  let delta = targetAbsolute - startAngle;
+  const minDelta = Math.PI * 2 * 5;
+  while (delta < minDelta) delta += Math.PI * 2;
+
+  const duration = 4200 + Math.random() * 900;
+  const t0 = performance.now();
+
+  function animate(t) {
+    const p = Math.min((t - t0) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3.5);
+    currentAngle = startAngle + delta * ease;
+    drawWheel();
+    if (p < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      isSpinning = false;
+      updateSpinButton();
+      showWinner(items[winnerIdx]);
+    }
+  }
+  requestAnimationFrame(animate);
+}
+
+/* ---- WINNER MODAL ---- */
+function showWinner(dish) {
+  _lastFocused = document.activeElement;
+  selectedWinner = dish;
+  $('#winnerTitle').textContent = dish.title;
+  $('#winnerIngredients').innerHTML = `<strong>Nguyên liệu:</strong><br>${esc(dish.ingredients || '').replace(/\n/g, '<br>')}`;
+  $('#winnerSteps').innerHTML = `<strong>Hướng dẫn nấu:</strong><br>${esc(dish.steps || '').replace(/\n/g, '<br>')}`;
+
+  const img = $('#winnerImg');
+  if (dish.image) {
+    img.src = dish.image;
+    img.style.display = 'block';
+  } else {
+    img.style.display = 'none';
+    img.removeAttribute('src');
+  }
+  $('#winnerModal').classList.add('active');
+
+  requestAnimationFrame(() => {
+    const box = document.querySelector('#winnerModal .modal-content');
+    const first = box && _getFocusable(box)[0];
+    if (first) first.focus();
+  });
+}
+
+$('#editWinnerBtn').addEventListener('click', () => {
+  if (!selectedWinner) return;
+  const idToEdit = selectedWinner.id;
+  closeModal('winnerModal');
+  switchTab('chef');
+  setTimeout(() => openEditModal(idToEdit), 100);
+});
+
+$('#spinAgainBtn').addEventListener('click', () => {
+  closeModal('winnerModal');
+  setTimeout(spinWheel, 250);
+});
+
+/* ============================================================
+   9) RESIZE OBSERVER
+   ============================================================ */
+let _rzTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(_rzTimer);
+  _rzTimer = setTimeout(() => {
+    if ($('#wheel-tab').classList.contains('active')) {
+      fitCanvas();
+      drawWheel();
+    }
+  }, 120);
+});
+
+if (window.ResizeObserver) {
+  new ResizeObserver(() => {
+    if ($('#wheel-tab').classList.contains('active')) {
+      const before = canvas._size;
+      fitCanvas();
+      if (canvas._size !== before) drawWheel();
+    }
+  }).observe(canvas.parentElement);
+}
+
+/* ============================================================
+   10) KHỞI ĐỘNG
+   ============================================================ */
+renderMainIngredients();
+renderSubIngredients();
+initData();
+renderWheelChecklist();
+requestAnimationFrame(() => { fitCanvas(); drawWheel(); });
+
+console.log('[Bếp Nhà v6.2] Đã fix: double-toggle, rollback, unique ID, focus trap ✔');
+</script>
+</body>
+</html>
